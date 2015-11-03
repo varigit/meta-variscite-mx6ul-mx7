@@ -1,0 +1,16 @@
+#default network setup for Variscite DART-6UL
+#
+#
+[global]
+OfflineMode=false
+Description = Variscite network configuration
+
+[Wired]
+Enable=true
+
+[WiFi]
+Enable=true
+
+[Bluetooth]
+Enable=true
+
