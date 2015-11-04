@@ -36,4 +36,13 @@ QT5_IMAGE_INSTALL_mx6sl = "${@base_contains('DISTRO_FEATURES', 'x11','${QT5_IMAG
 IMAGE_INSTALL += " \
 ${QT5_IMAGE_INSTALL} \
 "
+
+IMAGE_INSTALL += " \
+minicom \
+tcf-agent \
+openssh-sftp-server \
+fio \
+"
+IMAGE_FSTYPES = "tar.bz2 ext3 sdcard"
+
 export IMAGE_BASENAME = "fsl-image-qt5"
