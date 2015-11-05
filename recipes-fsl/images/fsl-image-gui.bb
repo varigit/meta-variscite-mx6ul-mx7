@@ -91,6 +91,8 @@ openssh-sftp-server \
 fio \
 "
 
+#IMAGE_FSTYPES = "tar.bz2 ext3 sdcard ubi"
+
 export IMAGE_BASENAME = "fsl-image-gui"
 
 

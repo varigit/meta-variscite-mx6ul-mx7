@@ -154,7 +154,7 @@ function copy_scripts
 echo "scripts..."
 sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/nand-recovery.sh 	/tmp/rootfs/sbin/
 sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-nand.sh    	/tmp/rootfs/sbin/
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-dart.sh     /tmp/rootfs/sbin/
+sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-emmc.sh     /tmp/rootfs/sbin/
 #
 sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/e2fsprogs/1.42.9-r0/image/sbin/e2label 	/tmp/rootfs/sbin
 sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/util-linux/2.25.2-r1/build/sfdisk 		/tmp/rootfs/sbin/

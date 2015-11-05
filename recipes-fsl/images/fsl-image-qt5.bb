@@ -43,6 +43,6 @@ tcf-agent \
 openssh-sftp-server \
 fio \
 "
-IMAGE_FSTYPES = "tar.bz2 ext3 sdcard"
+#IMAGE_FSTYPES = "tar.bz2 ext3 sdcard"
 
 export IMAGE_BASENAME = "fsl-image-qt5"
