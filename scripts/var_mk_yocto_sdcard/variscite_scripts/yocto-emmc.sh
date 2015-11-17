@@ -27,9 +27,9 @@ cd /opt/images/Yocto
 #	echo "SPL does not exist! exit."
 #	exit 1
 #fi	
-if [ ! -f u-boot-sd-2015.04-r0.imx ]
+if [ ! -f u-boot-sd-2015.04-r0.img ]
 then
-	echo "u-boot-sd-2015.04-r0.imx does not exist! exit."
+	echo "u-boot-sd-2015.04-r0.img does not exist! exit."
 	exit 1
 fi	
 
@@ -61,7 +61,12 @@ node="/dev/mmcblk1"
 cal_only=0
 
 if [ ! -e ${node} ]; then
-	help
+	echo "============================================"
+	echo " can't find ${node}.                        "
+	echo " Make sure you booted with:                 "
+        echo " fdt_file=imx6ul-var-dart-sd_emmc.dtb       "
+        echo " Also make sure that this is not NAND SOM   "
+	echo "============================================"
 	exit
 fi
 
@@ -84,7 +89,8 @@ function flash_yocto
     cd /opt/images/Yocto
     echo "flashing U-BOOT ..."
     mount | grep mmcblk1   
-    sudo dd if=u-boot-sd-2015.04-r0.imx of=/dev/mmcblk1 bs=1K seek=1; sync
+    sudo dd if=SPL-sd of=/dev/mmcblk1 bs=1K seek=1; sync
+    sudo dd if=u-boot-sd-2015.04-r0.img of=/dev/mmcblk1 bs=1K seek=69; sync
 
     echo "flashing Yocto BOOT partition ..."    
     mkdir -p /tmp/media/mmcblk1p1

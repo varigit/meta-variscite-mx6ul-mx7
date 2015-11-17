@@ -20,6 +20,13 @@ ANDROID_SYSTEM=android_root.img
 UBI_SUB_PAGE_SIZE=2048
 UBI_VID_HDR_OFFSET=2048
 
+#Creating 5 MTD partitions on "gpmi-nand":
+#0x000000000000-0x000000200000 : "spl"
+#0x000000200000-0x000000400000 : "uboot"
+#0x000000400000-0x000000600000 : "uboot-env"
+#0x000000600000-0x000000e00000 : "kernel"
+#0x000000e00000-0x000040000000 : "rootfs"
+
 install_bootloader()
 {
 	if [ ! -f $MEDIA/$OS/$UBOOT_IMAGE ]
@@ -29,15 +36,12 @@ install_bootloader()
 	fi	
 
 	echo "Installing U-BOOT from \"$MEDIA/$OS/$UBOOT_IMAGE\"..."
-	if [ "$FLASH" != "Emmc" ] ; then
 	#Flash to NAND	
-		flash_erase /dev/mtd0 0 0 2>/dev/null
-		kobs-ng init -x $MEDIA/$OS/$UBOOT_IMAGE --search_exponent=1 -v > /dev/null
-	else
-	#Flash to eMMC
-		dd if=$MEDIA/$OS/$UBOOT_IMAGE  of=/dev/mmcblk1 bs=1K seek=1; sync
-	fi
-
+	flash_erase /dev/mtd0 0 0 2>/dev/null
+	kobs-ng init -x $MEDIA/$OS/$SPL_IMAGE --search_exponent=1 -v > /dev/null
+	flash_erase /dev/mtd1 0 0 2>/dev/null
+	nandwrite -p /dev/mtd1 $MEDIA/$OS/$UBOOT_IMAGE;sync
+	flash_erase /dev/mtd2 0 0 2>/dev/null
 }
 
 install_kernel()
@@ -48,9 +52,9 @@ install_kernel()
 		exit 1
 	fi	
 	echo "Installing Kernel ..."
-	flash_erase  /dev/mtd1 0 0 2>/dev/null
-	nandwrite -p /dev/mtd1 $MEDIA/$OS/$KERNEL_IMAGE > /dev/null
-	nandwrite -p /dev/mtd1 -s 0x5e0000 $MEDIA/$OS/$KERNEL_DTB > /dev/null
+	flash_erase  /dev/mtd3 0 0 2>/dev/null
+	nandwrite -p /dev/mtd3 $MEDIA/$OS/$KERNEL_IMAGE > /dev/null
+	nandwrite -p /dev/mtd3 -s 0x7e0000 $MEDIA/$OS/$KERNEL_DTB > /dev/null
 }
 
 install_rootfs()
@@ -61,8 +65,8 @@ install_rootfs()
 		exit 1
 	fi	
 	echo "Installing UBI rootfs ..."
-	flash_erase /dev/mtd2 0 0 3>/dev/null
-	ubiformat /dev/mtd2 -f $MEDIA/$OS/$ROOTFS_IMAGE -s $UBI_SUB_PAGE_SIZE -O $UBI_VID_HDR_OFFSET
+	flash_erase /dev/mtd4 0 0 3>/dev/null
+	ubiformat /dev/mtd4 -f $MEDIA/$OS/$ROOTFS_IMAGE -s $UBI_SUB_PAGE_SIZE -O $UBI_VID_HDR_OFFSET
 }
 
                                                                           
@@ -135,7 +139,8 @@ echo "*********************************************"
 
 if [ "$FLASH" != "Emmc" ] ; then
 #Flash to NAND	
-	UBOOT_IMAGE=u-boot-nand-2015.04-r0.imx
+	SPL_IMAGE=SPL-nand
+	UBOOT_IMAGE=u-boot-nand-2015.04-r0.img
 	KERNEL_DTB=zImage-imx6ul-var-dart-nand_wifi.dtb
 	install_bootloader
 	install_kernel
