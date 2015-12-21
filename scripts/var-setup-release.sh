@@ -175,6 +175,16 @@ else
     cp $BUILD_DIR/conf/bblayers.conf.org $BUILD_DIR/conf/bblayers.conf
 fi
 
+echo "##Variscite additional pacakges" >> $BUILD_DIR/conf/local.conf
+echo "IMAGE_INSTALL_append = \" \\" >> $BUILD_DIR/conf/local.conf
+echo "    minicom \\" >> $BUILD_DIR/conf/local.conf
+echo "    tcf-agent \\" >> $BUILD_DIR/conf/local.conf
+echo "    openssh-sftp-server \\" >> $BUILD_DIR/conf/local.conf
+echo "    fio \\" >> $BUILD_DIR/conf/local.conf
+echo "    bcm4343w-fw \\" >> $BUILD_DIR/conf/local.conf
+echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
+echo "    \"" >> $BUILD_DIR/conf/local.conf
+
 
 META_FSL_BSP_RELEASE="${CWD}/sources/meta-fsl-bsp-release/imx/meta-bsp"
 echo "##Freescale Yocto Release layer" >> $BUILD_DIR/conf/bblayers.conf
