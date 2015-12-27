@@ -182,6 +182,7 @@ echo "    tcf-agent \\" >> $BUILD_DIR/conf/local.conf
 echo "    openssh-sftp-server \\" >> $BUILD_DIR/conf/local.conf
 echo "    fio \\" >> $BUILD_DIR/conf/local.conf
 echo "    bcm4343w-fw \\" >> $BUILD_DIR/conf/local.conf
+echo "    brcm-patchram-plus \\" >> $BUILD_DIR/conf/local.conf
 echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
 echo "    \"" >> $BUILD_DIR/conf/local.conf
 
