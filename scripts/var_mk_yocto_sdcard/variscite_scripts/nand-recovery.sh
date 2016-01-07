@@ -131,23 +131,18 @@ else
 	exit 0
 fi
 
-echo "*********************************************"
-echo "*** VAR-MX6 eMMC/nand RECOVERY Version 01 ***"
-echo "*** Installing $OS on $FLASH              ***"
-echo "*** Using $KERNEL_DTB Device tree         ***"
-echo "*********************************************"
+SPL_IMAGE=SPL-nand
+UBOOT_IMAGE=u-boot-nand-2015.04-r0.img
+KERNEL_DTB=zImage-imx6ul-var-dart-nand_wifi.dtb
+echo "**********************************************"
+echo "*** DART-6UL eMMC/nand RECOVERY Version 01 ***"
+echo "*** Installing $OS on $FLASH               ***"
+echo "*** Using $KERNEL_DTB Device tree          ***"
+echo "**********************************************"
 
-if [ "$FLASH" != "Emmc" ] ; then
-#Flash to NAND	
-	SPL_IMAGE=SPL-nand
-	UBOOT_IMAGE=u-boot-nand-2015.04-r0.img
-	KERNEL_DTB=zImage-imx6ul-var-dart-nand_wifi.dtb
-	install_bootloader
-	install_kernel
-	install_rootfs
-else
-#Flash to eMMC
-	. /sbin/yocto_dart.sh /dev/mmcblk1
-fi
+install_bootloader
+install_kernel
+install_rootfs
+
 
 exit 0
