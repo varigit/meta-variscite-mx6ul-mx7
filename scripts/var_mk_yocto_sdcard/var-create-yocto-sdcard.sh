@@ -58,6 +58,7 @@ if [ "$?" -eq "0" ]; then
 	part="p"
 fi
 
+umount ${node}*
 fdisk ${node} >/dev/null >>/dev/null <<EOF 
 d
 1
@@ -200,4 +201,6 @@ echo "umount ..."
 sync
 sudo umount /tmp/BOT-DART6UL
 sudo umount /tmp/rootfs
+sudo rm -rf /tmp/BOT-DART6UL
+sudo rm -rf /tmp/rootfs
 

@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-# variscite bluetooth 
+# variscite bluetooth DART-6UL
 #
 # This script is executed at the end of each multiuser runlevel.
 # Make sure that the script will "exit 0" on success or any other
@@ -31,15 +31,11 @@ echo 1 > /sys/class/gpio/gpio132/value
 sleep 1
 #
 brcm_patchram_plus --patchram /lib/firmware/bcm/bcm43430a1.hcd  --enable_hci --bd_addr 64:a3:cb:5b:69:f0 --no2bytes --tosleep 1000 /dev/ttymxc1 &
-
-#hciattach -n /dev/ttymxc1 any 3000000
 #
-#
-#hciattach -t 10 -s 115200 -n /dev/ttymxc1 any 3000000  2> /dev/null
-#
-#bluetoothd
 /usr/lib/bluez5/bluetooth/bluetoothd &
+sleep 2
 #
 hciconfig hci0 up
 #
 exit 0
+
