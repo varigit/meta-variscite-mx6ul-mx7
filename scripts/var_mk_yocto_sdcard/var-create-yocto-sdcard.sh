@@ -5,6 +5,91 @@ BOOTLOAD_RESERVE=8
 BOOT_ROM_SIZE=20
 SPARE_SIZE=400
 
+function format_yocto
+{
+    echo "formating yocto partitions"
+    echo "=========================="
+    mkfs.vfat ${node}${part}1 -nBOT-DART6UL
+    mkfs.ext4 ${node}${part}2 -Lrootfs
+}
+
+function flash_yocto
+{
+    echo "flashing yocto "
+    echo "==============="
+    mkdir -p /tmp/BOT-DART6UL
+    mkdir -p /tmp/rootfs
+    sync
+    ls -l /tmp/BOT-DART6UL
+    ls -l /tmp/rootfs
+
+    echo "flashing U-BOOT ${node}${part} ..."    
+    echo "----------------------------------"
+    sudo dd if=tmp/deploy/images/imx6ul-var-dart/SPL-sd of=${node} bs=1K seek=1; sync
+    sudo dd if=tmp/deploy/images/imx6ul-var-dart/u-boot-sd-2015.04-r0.img of=${node} bs=1K seek=69; sync
+
+    echo "flashing Yocto BOOT partition ${node}${part}1 ..."    
+    echo "-------------------------------------------------"
+    sync
+    mount ${node}${part}1  /tmp/BOT-DART6UL
+    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-emmc_wifi.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-emmc_wifi.dtb
+    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-nand_wifi.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-nand_wifi.dtb
+    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_emmc.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-sd_emmc.dtb
+    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_nand.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-sd_nand.dtb
+    cp tmp/deploy/images/imx6ul-var-dart/zImage					/tmp/BOT-DART6UL/zImage
+
+    echo "flashing Yocto Root file System ${node}${part}2 ..."    
+    echo "---------------------------------------------------"
+    sync
+    mount ${node}${part}2  /tmp/rootfs
+    tar xvpf tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.tar.bz2 -C /tmp/rootfs/ 2>&1 |
+    while read line; do
+        x=$((x+1))
+        echo -en "$x extracted\r"
+    done
+
+
+}
+
+function copy_yocto
+{
+sudo mkdir -p /tmp/rootfs/opt
+sudo mkdir -p /tmp/rootfs/opt/images
+sudo mkdir -p /tmp/rootfs/opt/images/Yocto
+#
+echo "Copying Fido V01 /opt/images/Yocto..."
+echo "-------------------------------------"
+sudo cp tmp/deploy/images/imx6ul-var-dart/zImage 					/tmp/rootfs/opt/images/Yocto
+sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.tar.bz2 	/tmp/rootfs/opt/images/Yocto/rootfs.tar.bz2
+sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.ubi 		/tmp/rootfs/opt/images/Yocto/rootfs.ubi.img
+sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.sdcard 		/tmp/rootfs/opt/images/Yocto/rootfs.sdcard
+#
+sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-emmc_wifi.dtb 		/tmp/rootfs/opt/images/Yocto/
+sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-nand_wifi.dtb		/tmp/rootfs/opt/images/Yocto/
+sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_emmc.dtb 		/tmp/rootfs/opt/images/Yocto/
+sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_nand.dtb 		/tmp/rootfs/opt/images/Yocto/
+echo "nand u-boot..."
+sudo cp tmp/deploy/images/imx6ul-var-dart/SPL-nand					/tmp/rootfs/opt/images/Yocto/
+sudo cp tmp/deploy/images/imx6ul-var-dart/u-boot-nand-2015.04-r0.img			/tmp/rootfs/opt/images/Yocto/
+echo "sd u-boot..."
+sudo cp tmp/deploy/images/imx6ul-var-dart/SPL-sd					/tmp/rootfs/opt/images/Yocto/
+sudo cp tmp/deploy/images/imx6ul-var-dart/u-boot-sd-2015.04-r0.img			/tmp/rootfs/opt/images/Yocto/
+}
+
+function copy_scripts
+{
+echo "scripts..."
+sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/nand-recovery.sh 	/tmp/rootfs/sbin/
+sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-nand.sh    	/tmp/rootfs/sbin/
+sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-emmc.sh     /tmp/rootfs/sbin/
+#
+sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/e2fsprogs/1.42.9-r0/image/sbin/e2label 	/tmp/rootfs/sbin
+sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/util-linux/2.25.2-r1/build/sfdisk 		/tmp/rootfs/sbin/
+#
+echo "desktop icons..."
+sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/*.desktop      	/tmp/rootfs/usr/share/applications/ 
+sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/terminal*      	/tmp/rootfs/usr/bin
+}
 
 echo "Variscite Make Yocto Fido SDCARD utility version 02 DART-6UL version"
 echo "====================================================================="
@@ -87,102 +172,28 @@ EOF
 exit
 fi
 
-function format_yocto
-{
-    echo "formating yocto partitions"
-    echo "=========================="
-    mkfs.vfat ${node}${part}1 -nBOT-DART6UL
-    mkfs.ext4 ${node}${part}2 -Lrootfs
-}
-
-function flash_yocto
-{
-    echo "flashing yocto "
-    echo "==============="
-    mkdir -p /tmp/BOT-DART6UL
-    mkdir -p /tmp/rootfs
-    sync
-    ls -l /tmp/BOT-DART6UL
-    ls -l /tmp/rootfs
-
-    echo "flashing U-BOOT ${node}${part} ..."    
-    echo "----------------------------------"
-    sudo dd if=tmp/deploy/images/imx6ul-var-dart/SPL-sd of=${node} bs=1K seek=1; sync
-    sudo dd if=tmp/deploy/images/imx6ul-var-dart/u-boot-sd-2015.04-r0.img of=${node} bs=1K seek=69; sync
-
-    echo "flashing Yocto BOOT partition ${node}${part}1 ..."    
-    echo "-------------------------------------------------"
-    sync
-    mount ${node}${part}1  /tmp/BOT-DART6UL
-    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-emmc_wifi.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-emmc_wifi.dtb
-    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-nand_wifi.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-nand_wifi.dtb
-    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_emmc.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-sd_emmc.dtb
-    cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_nand.dtb	/tmp/BOT-DART6UL/imx6ul-var-dart-sd_nand.dtb
-    cp tmp/deploy/images/imx6ul-var-dart/zImage					/tmp/BOT-DART6UL/zImage
-
-    echo "flashing Yocto Root file System ${node}${part}2 ..."    
-    echo "---------------------------------------------------"
-    sync
-    mount ${node}${part}2  /tmp/rootfs
-    tar xf tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.tar.bz2 -C /tmp/rootfs/ 
-
-}
-
-function copy_yocto
-{
-sudo mkdir -p /tmp/rootfs/opt
-sudo mkdir -p /tmp/rootfs/opt/images
-sudo mkdir -p /tmp/rootfs/opt/images/Yocto
-#
-echo "Copying Fido V01 /opt/images/Yocto..."
-echo "-------------------------------------"
-sudo cp tmp/deploy/images/imx6ul-var-dart/zImage 					/tmp/rootfs/opt/images/Yocto
-sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.tar.bz2 	/tmp/rootfs/opt/images/Yocto/rootfs.tar.bz2
-sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.ubi 		/tmp/rootfs/opt/images/Yocto/rootfs.ubi.img
-sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.sdcard 		/tmp/rootfs/opt/images/Yocto/rootfs.sdcard
-#
-sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-emmc_wifi.dtb 		/tmp/rootfs/opt/images/Yocto/
-sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-nand_wifi.dtb		/tmp/rootfs/opt/images/Yocto/
-sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_emmc.dtb 		/tmp/rootfs/opt/images/Yocto/
-sudo cp tmp/deploy/images/imx6ul-var-dart/zImage-imx6ul-var-dart-sd_nand.dtb 		/tmp/rootfs/opt/images/Yocto/
-echo "nand u-boot..."
-sudo cp tmp/deploy/images/imx6ul-var-dart/SPL-nand					/tmp/rootfs/opt/images/Yocto/
-sudo cp tmp/deploy/images/imx6ul-var-dart/u-boot-nand-2015.04-r0.img			/tmp/rootfs/opt/images/Yocto/
-echo "sd u-boot..."
-sudo cp tmp/deploy/images/imx6ul-var-dart/SPL-sd					/tmp/rootfs/opt/images/Yocto/
-sudo cp tmp/deploy/images/imx6ul-var-dart/u-boot-sd-2015.04-r0.img			/tmp/rootfs/opt/images/Yocto/
-}
-
-function copy_scripts
-{
-echo "scripts..."
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/nand-recovery.sh 	/tmp/rootfs/sbin/
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-nand.sh    	/tmp/rootfs/sbin/
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-emmc.sh     /tmp/rootfs/sbin/
-#
-sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/e2fsprogs/1.42.9-r0/image/sbin/e2label 	/tmp/rootfs/sbin
-sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/util-linux/2.25.2-r1/build/sfdisk 		/tmp/rootfs/sbin/
-#
-echo "desktop icons..."
-sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/*.desktop      	/tmp/rootfs/usr/share/applications/ 
-sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/terminal*      	/tmp/rootfs/usr/bin
-}
-
 # destroy the partition table
 dd if=/dev/zero of=${node} bs=1024 count=1
-
-sfdisk --force -uM ${node} << EOF
-,${boot_rom_sizeb},b
-,${rootfs_size},83
-EOF
-
-# adjust the partition reserve for bootloader.
-# if you don't put the uboot on same device, you can remove the BOOTLOADER_ERSERVE
-# to have 8M space.
-# the minimal sylinder for some card is 4M, maybe some was 8M
-# just 8M for some big eMMC 's sylinder
-sfdisk --force -uM ${node} -N1 << EOF
-${BOOTLOAD_RESERVE},${BOOT_ROM_SIZE},83
+sync
+#
+# Create new partition table
+# We limit the size to less than 4GB
+#
+fdisk /${node} <<EOF 
+n
+p
+1
+8192
+24575
+t
+c
+n
+p
+2
+24576
+7500000
+p
+w
 EOF
 
 # format the SDCARD/DATA/CACHE partition
