@@ -132,7 +132,7 @@ else
 fi
 
 SPL_IMAGE=SPL-nand
-UBOOT_IMAGE=u-boot-nand-2015.04-r0.img
+UBOOT_IMAGE=u-boot-nand-2015.10-r0.img
 KERNEL_DTB=zImage-imx6ul-var-dart-nand_wifi.dtb
 echo "**********************************************"
 echo "*** DART-6UL eMMC/nand RECOVERY Version 01 ***"

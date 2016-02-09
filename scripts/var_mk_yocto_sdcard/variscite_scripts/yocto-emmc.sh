@@ -27,9 +27,9 @@ cd /opt/images/Yocto
 #	echo "SPL does not exist! exit."
 #	exit 1
 #fi	
-if [ ! -f u-boot-sd-2015.04-r0.img ]
+if [ ! -f u-boot-sd-2015.10-r0.img ]
 then
-	echo "u-boot-sd-2015.04-r0.img does not exist! exit."
+	echo "u-boot-sd-2015.10-r0.img does not exist! exit."
 	exit 1
 fi	
 
@@ -90,7 +90,7 @@ function flash_yocto
     echo "flashing U-BOOT ..."
     mount | grep mmcblk1   
     sudo dd if=SPL-sd of=/dev/mmcblk1 bs=1K seek=1; sync
-    sudo dd if=u-boot-sd-2015.04-r0.img of=/dev/mmcblk1 bs=1K seek=69; sync
+    sudo dd if=u-boot-sd-2015.10-r0.img of=/dev/mmcblk1 bs=1K seek=69; sync
 
     echo "flashing Yocto BOOT partition ..."    
     mkdir -p /tmp/media/mmcblk1p1

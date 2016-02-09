@@ -64,36 +64,36 @@ do
             BACKEND="$OPTARG"
             if [ "$BACKEND" = "fb" ]; then
                 if [ -z "$DISTRO" ]; then
-                    FSLDISTRO='fsl-imx-release-fb'
+                    FSLDISTRO='fsl-imx-fb'
                     echo -e "\n Using FB backend with FB DIST_FEATURES to override poky X11 DIST FEATURES"
-                elif [ ! "$DISTRO" = "fsl-imx-release-fb" ]; then
+                elif [ ! "$DISTRO" = "fsl-imx-fb" ]; then
                     echo -e "\n DISTRO specified conflicts with -e. Please use just one or the other."
                     fsl_setup_error='true'
                 fi
 
             elif [ "$BACKEND" = "dfb" ]; then
                 if [ -z "$DISTRO" ]; then
-                    FSLDISTRO='fsl-imx-release-dfb'
+                    FSLDISTRO='fsl-imx-dfb'
                     echo -e "\n Using DirectFB backend with DirectFB DIST_FEATURES to override poky X11 DIST FEATURES"
-                elif [ ! "$DISTRO" = "fsl-imx-release-dfb" ]; then
+                elif [ ! "$DISTRO" = "fsl-imx-dfb" ]; then
                     echo -e "\n DISTRO specified conflicts with -e. Please use just one or the other."
                     fsl_setup_error='true'
                 fi
 
             elif [ "$BACKEND" = "wayland" ]; then
                 if [ -z "$DISTRO" ]; then
-                    FSLDISTRO='fsl-imx-release-wayland'
+                    FSLDISTRO='fsl-imx-wayland'
                     echo -e "\n Using Wayland backend."
-                elif [ ! "$DISTRO" = "fsl-imx-release-wayland" ]; then
+                elif [ ! "$DISTRO" = "fsl-imx-wayland" ]; then
                     echo -e "\n DISTRO specified conflicts with -e. Please use just one or the other."
                     fsl_setup_error='true'
                 fi
 
             elif [ "$BACKEND" = "x11" ]; then
                 if [ -z "$DISTRO" ]; then
-                    FSLDISTRO='fsl-imx-release-x11'
+                    FSLDISTRO='fsl-imx-x11'
                     echo -e  "\n Using X11 backend with poky DIST_FEATURES"
-                elif [ ! "$DISTRO" = "fsl-imx-release-x11" ]; then
+                elif [ ! "$DISTRO" = "fsl-imx-x11" ]; then
                     echo -e "\n DISTRO specified conflicts with -e. Please use just one or the other."
                     fsl_setup_error='true'
                 fi
@@ -113,7 +113,7 @@ done
 
 if [ -z "$DISTRO" ]; then
     if [ -z "$FSLDISTRO" ]; then
-        FSLDISTRO='fsl-imx-release-x11'
+        FSLDISTRO='fsl-imx-x11'
     fi
 else
     FSLDISTRO="$DISTRO"
@@ -136,13 +136,27 @@ if [ -z "$MACHINE" ]; then
 fi
 
 # New machine definitions may need to be added to the expected location
-cp -r sources/meta-fsl-bsp-release/imx/meta-bsp/conf/machine/* sources/meta-fsl-arm/conf/machine
+if [ -d ./sources/meta-freescale ]; then
+   cp -r sources/meta-fsl-bsp-release/imx/meta-bsp/conf/machine/* sources/meta-freescale/conf/machine
+else
+   cp -r sources/meta-fsl-bsp-release/imx/meta-bsp/conf/machine/* sources/meta-fsl-arm/conf/machine
+fi
 
 # copy new EULA into community so setup uses latest i.MX EULA
-cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-fsl-arm/EULA
-cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
+if [ -d ./sources/meta-freescale ]; then
+   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-freescale/EULA
+   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
+else
+   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-fsl-arm/EULA
+   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
+fi
+
 # copy unpack class with md5sum that matches new EULA
-cp sources/meta-fsl-bsp-release/imx/classes/fsl-eula-unpack.bbclass sources/meta-fsl-arm/classes
+if [ -d ./sources/meta-freescale ]; then
+   cp sources/meta-fsl-bsp-release/imx/classes/fsl-eula-unpack.bbclass sources/meta-freescale/classes
+else
+   cp sources/meta-fsl-bsp-release/imx/classes/fsl-eula-unpack.bbclass sources/meta-fsl-arm/classes
+fi
 
 # Set up the basic yocto environment
 if [ -z "$DISTRO" ]; then
@@ -202,6 +216,19 @@ echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-filesystems \"" >
 echo "BBLAYERS += \" \${BSPDIR}/sources/meta-qt5 \"" >> $BUILD_DIR/conf/bblayers.conf
 
 echo "BBLAYERS += \" \${BSPDIR}/sources/meta-variscite-6ul \"" >> $BUILD_DIR/conf/bblayers.conf
+
+echo BSPDIR=$BSPDIR
+echo BUILD_DIR=$BUILD_DIR
+if [ -d ../sources/meta-freescale ]; then
+    echo meta-freescale directory found
+    # Change settings according to environment
+    sed -e "s,meta-fsl-arm\s,meta-freescale ,g" \
+        -i conf/bblayers.conf
+    sed -e "s,LAYERDEPENDS\s,#LAYERDEPENDS,g" \
+        -i ../sources/meta-fsl-arm-extra/conf/layer.conf
+    sed -e "s,..BSPDIR./sources/meta-fsl-arm-extra\s, ,g" \
+        -i conf/bblayers.conf
+fi
 
 cd  $BUILD_DIR
 clean_up
