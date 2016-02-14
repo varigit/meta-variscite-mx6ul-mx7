@@ -184,6 +184,11 @@ echo "    fio \\" >> $BUILD_DIR/conf/local.conf
 echo "    bcm4343w-fw \\" >> $BUILD_DIR/conf/local.conf
 echo "    brcm-patchram-plus \\" >> $BUILD_DIR/conf/local.conf
 echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
+echo "    tslib-calibrate \\" >> $BUILD_DIR/conf/local.conf
+echo "    tslib-tests \\" >> $BUILD_DIR/conf/local.conf
+if [ "$BACKEND" = "fb" ]; then
+echo "    qtbase-examples \\" >> $BUILD_DIR/conf/local.conf
+fi
 echo "    \"" >> $BUILD_DIR/conf/local.conf
 
 
