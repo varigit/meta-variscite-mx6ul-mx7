@@ -192,12 +192,18 @@ fi
 echo "##Variscite additional pacakges" >> $BUILD_DIR/conf/local.conf
 echo "IMAGE_INSTALL_append = \" \\" >> $BUILD_DIR/conf/local.conf
 echo "    minicom \\" >> $BUILD_DIR/conf/local.conf
+echo "    imx-kobs \\" >> $BUILD_DIR/conf/local.conf
 echo "    tcf-agent \\" >> $BUILD_DIR/conf/local.conf
 echo "    openssh-sftp-server \\" >> $BUILD_DIR/conf/local.conf
 echo "    fio \\" >> $BUILD_DIR/conf/local.conf
 echo "    bcm4343w-fw \\" >> $BUILD_DIR/conf/local.conf
 echo "    brcm-patchram-plus \\" >> $BUILD_DIR/conf/local.conf
 echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
+echo "    tslib-calibrate \\" >> $BUILD_DIR/conf/local.conf
+echo "    tslib-tests \\" >> $BUILD_DIR/conf/local.conf
+if [ "$BACKEND" = "fb" ]; then
+echo "    qtbase-examples \\" >> $BUILD_DIR/conf/local.conf
+fi
 echo "    \"" >> $BUILD_DIR/conf/local.conf
 
 
