@@ -1,0 +1,57 @@
+From 8a0d1addf40461a70f81d7946dd11a415c42f54c Mon Sep 17 00:00:00 2001
+From: rdonio <ron.d@variscite.com>
+Date: Tue, 1 Mar 2016 13:27:42 +0200
+Subject: [PATCH] use older kobs-ng due to bugs. 5.1 instead of 5.3
+
+---
+ imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.1.bb | 15 +++++++++++++++
+ imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.3.bb | 15 ---------------
+ 2 files changed, 15 insertions(+), 15 deletions(-)
+ create mode 100644 imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.1.bb
+ delete mode 100644 imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.3.bb
+
+diff --git a/imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.1.bb b/imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.1.bb
+new file mode 100644
+index 0000000..be0ac9c
+--- /dev/null
++++ b/imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.1.bb
+@@ -0,0 +1,15 @@
++# Copyright (C) 2013-2015 Freescale Semiconductor
++
++SUMMARY = "Nand boot write source"
++SECTION = "base"
++LICENSE = "GPLv2"
++LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
++
++SRC_URI = "${FSL_MIRROR}/imx-kobs-${PV}.tar.gz"
++
++SRC_URI[md5sum] = "b3217106d2ea7da2774835bf264633f1"
++SRC_URI[sha256sum] = "28c7356187ae26a2b37fb37a4b7bfdb63b3628b72d737d897ae6d5b969fbb51a"
++
++inherit  autotools pkgconfig
++
++COMPATIBLE_MACHINE = "(imx)"
+diff --git a/imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.3.bb b/imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.3.bb
+deleted file mode 100644
+index ccc4a24..0000000
+--- a/imx/meta-bsp/recipes-bsp/imx-kobs/imx-kobs_5.3.bb
++++ /dev/null
+@@ -1,15 +0,0 @@
+-# Copyright (C) 2013-2015 Freescale Semiconductor
+-
+-SUMMARY = "Nand boot write source"
+-SECTION = "base"
+-LICENSE = "GPLv2"
+-LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
+-
+-SRC_URI = "${FSL_MIRROR}/imx-kobs-${PV}.tar.gz"
+-
+-SRC_URI[md5sum] = "a2a9e1c3445d14c961577492313a41fb"
+-SRC_URI[sha256sum] = "45f729fc2b49556f1ca9df778f52bf5cc749cfe53664c8206daab29991c5f6c1"
+-
+-inherit  autotools pkgconfig
+-
+-COMPATIBLE_MACHINE = "(imx)"
+-- 
+1.9.1
+
