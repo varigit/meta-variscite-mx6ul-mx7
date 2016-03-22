@@ -201,6 +201,7 @@ echo "    brcm-patchram-plus \\" >> $BUILD_DIR/conf/local.conf
 echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
 echo "    tslib-calibrate \\" >> $BUILD_DIR/conf/local.conf
 echo "    tslib-tests \\" >> $BUILD_DIR/conf/local.conf
+echo "    hostapd \\" >> $BUILD_DIR/conf/local.conf
 if [ "$BACKEND" = "fb" ]; then
 echo "    qtbase-examples \\" >> $BUILD_DIR/conf/local.conf
 fi
