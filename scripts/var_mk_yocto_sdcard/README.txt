@@ -9,7 +9,7 @@ we flash the fsl-image-qt5-minimal
 You can switch to fsl-image-qt5 it will be without ubifs.
 
 
-cd ~/var-som-mx6-fido/build_x11
+cd ~/var-som-mx6-jethro/build_x11
 sudo ../sources/meta-variscite/scripts/var_mk_yocto_sdcard/var-create-yocto-sdcard.sh /dev/sdxxx
 change /dev/sdxxx to your device name
 

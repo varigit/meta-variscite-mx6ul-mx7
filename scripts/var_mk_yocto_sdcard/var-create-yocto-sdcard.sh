@@ -57,7 +57,7 @@ sudo mkdir -p /tmp/rootfs/opt
 sudo mkdir -p /tmp/rootfs/opt/images
 sudo mkdir -p /tmp/rootfs/opt/images/Yocto
 #
-echo "Copying Fido V01 /opt/images/Yocto..."
+echo "Copying Jethro V01 /opt/images/Yocto..."
 echo "-------------------------------------"
 sudo cp tmp/deploy/images/imx6ul-var-dart/zImage 					/tmp/rootfs/opt/images/Yocto
 sudo cp tmp/deploy/images/imx6ul-var-dart/fsl-image-gui-imx6ul-var-dart.tar.bz2 	/tmp/rootfs/opt/images/Yocto/rootfs.tar.bz2
@@ -84,14 +84,14 @@ sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scr
 sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-emmc.sh     /tmp/rootfs/sbin/
 #
 sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/e2fsprogs/1.42.9-r0/image/sbin/e2label 	/tmp/rootfs/sbin
-sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/util-linux/2.25.2-r1/build/sfdisk 		/tmp/rootfs/sbin/
+sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/util-linux/2.26.2-r0/build/sfdisk 		/tmp/rootfs/sbin/
 #
 echo "desktop icons..."
 sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/*.desktop      	/tmp/rootfs/usr/share/applications/ 
 sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/terminal*      	/tmp/rootfs/usr/bin
 }
 
-echo "Variscite Make Yocto Fido SDCARD utility version 02 DART-6UL version"
+echo "Variscite Make Yocto Jethro SDCARD utility version 02 DART-6UL version"
 echo "====================================================================="
 
 

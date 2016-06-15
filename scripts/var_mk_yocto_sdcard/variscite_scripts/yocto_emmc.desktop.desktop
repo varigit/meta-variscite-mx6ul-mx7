@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Yocto-eMMC
-Comment=Yocto Fido (V01).
+Comment=Yocto Jethro (V01).
 Exec=terminalye
 Icon=media-flash
 Terminal=false
