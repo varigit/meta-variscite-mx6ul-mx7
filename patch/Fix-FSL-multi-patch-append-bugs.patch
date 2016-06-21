@@ -1,0 +1,56 @@
+diff -Naur '--exclude=.git' '--exclude=poky' '--exclude=meta-variscite-6ul' '--exclude=EULA' a/meta-fsl-arm/recipes-multimedia/alsa/alsa-lib_%.bbappend b/meta-fsl-arm/recipes-multimedia/alsa/alsa-lib_%.bbappend
+--- a/meta-fsl-arm/recipes-multimedia/alsa/alsa-lib_%.bbappend  2016-06-21 13:58:40.975537725 +0300
++++ b/meta-fsl-arm/recipes-multimedia/alsa/alsa-lib_%.bbappend  2016-06-14 13:11:27.661023701 +0300
+@@ -1,7 +1,6 @@
+ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+ 
+ SRC_URI_append_mx6 = " file://0001-add-conf-for-multichannel-support-in-imx.patch"
+-SRC_URI_append_mx6ul = " file://0001-add-conf-for-multichannel-support-in-imx.patch"
+ SRC_URI_append_mx7 = " file://0001-add-conf-for-multichannel-support-in-imx.patch"
+ 
+ PACKAGE_ARCH_mx6 = "${MACHINE_SOCARCH}"
+diff -Naur '--exclude=.git' '--exclude=poky' '--exclude=meta-variscite-6ul' '--exclude=EULA' a/meta-fsl-arm/recipes-multimedia/alsa/fsl-alsa-plugins_1.0.25.bb b/meta-fsl-arm/recipes-multimedia/alsa/fsl-alsa-plugins_1.0.25.bb
+--- a/meta-fsl-arm/recipes-multimedia/alsa/fsl-alsa-plugins_1.0.25.bb   2016-06-21 13:58:40.975537725 +0300
++++ b/meta-fsl-arm/recipes-multimedia/alsa/fsl-alsa-plugins_1.0.25.bb   2016-06-14 14:07:04.876949634 +0300
+@@ -18,7 +18,6 @@
+ SRC_URI[sha256sum] = "902df92255d755e8eb08b3c3db0c7b9d70d26d9659b219373bee425ffdc34245"
+ 
+ SRC_URI_append_mx6 = " file://0001-asrc_pair-update-output-buffer-size.patch"
+-SRC_URI_append_mx6ul = " file://0001-asrc_pair-update-output-buffer-size.patch"
+ SRC_URI_append_mx7 = " file://0001-asrc_pair-update-output-buffer-size.patch"
+ 
+ INCLUDE_DIR = "-I${STAGING_KERNEL_DIR}/include/uapi -I${STAGING_KERNEL_DIR}/include"
+diff -Naur '--exclude=.git' '--exclude=poky' '--exclude=meta-variscite-6ul' '--exclude=EULA' a/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/alsa/alsa-lib_%.bbappend b/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/alsa/alsa-lib_%.bbappend
+--- a/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/alsa/alsa-lib_%.bbappend     2016-06-21 13:58:41.087537722 +0300
++++ b/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/alsa/alsa-lib_%.bbappend     2016-06-14 13:12:12.549022704 +0300
+@@ -1,7 +1,6 @@
+ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+ 
+ SRC_URI_append_mx6 = " file://0001-PCM-snd_pcm_xxxx_drain-maybe-blocked-after-suspend-a.patch"
+-SRC_URI_append_mx6ul = " file://0001-PCM-snd_pcm_xxxx_drain-maybe-blocked-after-suspend-a.patch"
+ SRC_URI_append_mx7 = " file://0001-PCM-snd_pcm_xxxx_drain-maybe-blocked-after-suspend-a.patch"
+ 
+ PACKAGE_ARCH_mx6 = "${MACHINE_SOCARCH}"
+diff -Naur '--exclude=.git' '--exclude=poky' '--exclude=meta-variscite-6ul' '--exclude=EULA' a/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/pulseaudio/pulseaudio_6.0.bbappend b/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/pulseaudio/pulseaudio_6.0.bbappend
+--- a/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/pulseaudio/pulseaudio_6.0.bbappend   2016-06-21 13:58:41.103537722 +0300
++++ b/meta-fsl-bsp-release/imx/meta-bsp/recipes-multimedia/pulseaudio/pulseaudio_6.0.bbappend   2016-06-14 13:46:51.292976568 +0300
+@@ -15,7 +15,6 @@
+ SRC_URI_remove = "file://0004-alsa-set-availability-for-some-unavailable-profiles.patch "
+ 
+ SRC_URI_append_mx6 = "${IMX_PATCHES}"
+-SRC_URI_append_mx6ul = "${IMX_PATCHES}"
+ SRC_URI_append_mx7 = "${IMX_PATCHES}"
+ 
+ # Enable allow-autospawn-for-root as default
+diff -Naur '--exclude=.git' '--exclude=poky' '--exclude=meta-variscite-6ul' '--exclude=EULA' a/meta-fsl-bsp-release/imx/meta-sdk/conf/distro/include/fsl-imx-base.inc b/meta-fsl-bsp-release/imx/meta-sdk/conf/distro/include/fsl-imx-base.inc
+--- a/meta-fsl-bsp-release/imx/meta-sdk/conf/distro/include/fsl-imx-base.inc    2016-06-21 13:58:41.103537722 +0300
++++ b/meta-fsl-bsp-release/imx/meta-sdk/conf/distro/include/fsl-imx-base.inc    2016-06-15 09:49:16.435375360 +0300
+@@ -15,7 +15,7 @@
+ IMX_DEFAULT_DISTRO_FEATURES = "largefile opengl ptest multiarch"
+ IMX_DEFAULT_EXTRA_RDEPENDS = "packagegroup-core-boot"
+ IMX_DEFAULT_EXTRA_RRECOMMENDS = "kernel-module-af-packet"
+-IMAGE_FSTYPES = "tar.bz2 ext4 sdcard"
++IMAGE_FSTYPES ?= "tar.bz2 ext4 sdcard"
+ 
+ BBMASK = "meta-fsl-arm/recipes-bsp/u-boot/u-boot-imx_2015.04.bb"
+ BBMASK .= "|meta-fsl-arm/recipes-bsp/u-boot/u-boot-imx-mfgtool_2015.04.bb"
