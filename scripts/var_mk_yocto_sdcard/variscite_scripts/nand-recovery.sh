@@ -119,7 +119,7 @@ then
 fi
 
 
-if [ `dmesg |grep UltraLite | wc -l` = 1 ] ; then
+if [ `cat /proc/cpuinfo |grep Ultralite | wc -l` = 1 ] ; then
 	echo "================================================"
 	echo " nand-recovery Variscite i.MX6 UltraLite DART   "
 	echo "================================================"
