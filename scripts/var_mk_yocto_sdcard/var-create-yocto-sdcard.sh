@@ -10,7 +10,7 @@ function format_yocto
     echo "formating yocto partitions"
     echo "=========================="
     mkfs.vfat ${node}${part}1 -nBOT-DART6UL
-    mkfs.ext4 ${node}${part}2 -Lrootfs
+    mkfs.ext4 ${node}${part}2 -Lrootfs -F
 }
 
 function flash_yocto
@@ -143,17 +143,9 @@ if [ "$?" -eq "0" ]; then
 	part="p"
 fi
 
-umount ${node}*
-fdisk ${node} >/dev/null >>/dev/null <<EOF 
-d
-1
-d
-2
-d
-3
-d
-w
-EOF
+umount ${node}* >/dev/null
+
+sleep 3;
 
 # call sfdisk to create partition table
 # get total card size
@@ -173,13 +165,16 @@ exit
 fi
 
 # destroy the partition table
-dd if=/dev/zero of=${node} bs=1024 count=1
+dd if=/dev/zero of=${node} bs=1024 count=100
 sync
+
+sleep 3;
+
 #
 # Create new partition table
 # We limit the size to less than 4GB
 #
-fdisk /${node} <<EOF 
+fdisk ${node} <<EOF 
 n
 p
 1
