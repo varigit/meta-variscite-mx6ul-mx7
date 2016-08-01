@@ -110,6 +110,7 @@ function flash_yocto
         x=$((x+1))
         echo -en "$x extracted\r"
     done
+	echo 'xinput set-int-prop "ft5x06_ts" "Evdev Axis Calibration" 32 3 793 3 466; xinput set-int-prop "ft5x06_ts" "Evdev Axes Swap" 8 0;' > /tmp/media/mmcblk1p2/etc/pointercal.xinput
 }
 
 
