@@ -10,24 +10,14 @@ SRC_URI_append_mx6 = " \
 
 SRC_URI_append_mx6ul = " \
         file://asound.state \
-        file://alsa-state \
 "
 
 do_install_append_mx6() {
     install -m 0644 ${WORKDIR}/asound.state.wm89586062 ${D}${localstatedir}/lib/alsa/asound.state
 }
 
-inherit update-rc.d
-
-INITSCRIPT_NAME = "alsa-state"
-INITSCRIPT_PARAMS = "start 99 2 3 4 5 . stop 30 0 6 ."
-
 do_install_append_mx6ul() {
     install -m 0644 ${WORKDIR}/asound.state ${D}${localstatedir}/lib/alsa/asound.state
-
-# reinstall alsa-state script
-	install -d ${D}${sysconfdir}/init.d
-	install -m 0755 ${WORKDIR}/alsa-state ${D}${sysconfdir}/init.d/alsa-state
 }
 
 # for i.MX7D
