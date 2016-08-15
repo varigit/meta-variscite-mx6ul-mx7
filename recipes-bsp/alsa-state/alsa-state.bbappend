@@ -2,23 +2,5 @@
 #   another file extension for new patch to the append in the meta-fsl-arm
 
 # Append path for freescale layer to include alsa-state asound.conf
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-
-SRC_URI_append_mx6 = " \
-	file://asound.state.wm89586062 \
-"
-
-SRC_URI_append_mx6ul = " \
-        file://asound.state \
-"
-
-do_install_append_mx6() {
-    install -m 0644 ${WORKDIR}/asound.state.wm89586062 ${D}${localstatedir}/lib/alsa/asound.state
-}
-
-do_install_append_mx6ul() {
-    install -m 0644 ${WORKDIR}/asound.state ${D}${localstatedir}/lib/alsa/asound.state
-}
-
-# for i.MX7D
-PACKAGE_ARCH_mx7 = "${MACHINE_ARCH}"
+FILESEXTRAPATHS_prepend_mx6ul := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend_mx7 := "${THISDIR}/${PN}:"

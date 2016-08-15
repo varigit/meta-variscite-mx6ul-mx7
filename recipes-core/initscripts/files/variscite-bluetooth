@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-# Activate Bluetooth for Variscite DART-6UL
+# Activate Bluetooth for Variscite DART-6UL / VAR-SOM-MX7
 #
 # This script is executed at the end of each multiuser runlevel.
 # Make sure that the script will "exit 0" on success or any other
@@ -9,9 +9,20 @@
 # In order to enable or disable this script just change the execution
 # bits.
 
+som=dart-6ul
 tuple_num=0x80
-gpio_num=132
-tty_dev=ttymxc1
+
+if [ "$som" = "dart-6ul" ]
+then
+	gpio_num=132
+	tty_dev=ttymxc1
+elif [ "$som" = "var-som-mx7" ]
+then
+	gpio_num=14
+	tty_dev=ttymxc2
+else
+	exit 1
+fi
 
 (dmesg | grep -q "tuple $tuple_num") # Check if BT/WIFI is up
 if [ $? -eq 0 ]

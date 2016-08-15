@@ -1,6 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 SRC_URI_append			= " file://variscite-bluetooth"
+SRC_URI_append_imx7-var-som	= " file://variscite-bluetooth-mx7.patch"
 
 do_install_append() {
 	if [ -e "${WORKDIR}/variscite-bluetooth" ]; then

@@ -2,7 +2,8 @@
 #
 # FSL Build Enviroment Setup Script
 #
-# Copyright (C) 2011-2013 Freescale Semiconductor
+# Copyright (C) 2011-2015 Freescale Semiconductor
+# Copyright (C) 2015-2016 Variscite Ltd.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,8 +31,10 @@ exit_message ()
 usage()
 {
     echo -e "\nUsage: source fsl-setup-release.sh
+    Mandatory environment variable: MACHINE
     Optional parameters: [-b build-dir] [-e back-end] [-h]"
 echo "
+    * MACHINE must be set to one of the following: {imx6ul-var-dart, imx7-var-som}
     * [-b build-dir]: Build directory, if unspecified script uses 'build' as output directory
     * [-e back-end]: Options are 'fb', 'dfb', 'x11, 'wayland'
     * [-h]: help
@@ -130,9 +133,8 @@ if [ -z "$BUILD_DIR" ]; then
     BUILD_DIR='build'
 fi
 
-if [ -z "$MACHINE" ]; then
-    echo setting to default machine
-    MACHINE='imx6ul-var-dart'
+if [ "$MACHINE" != "imx6ul-var-dart" ] && [ "$MACHINE" != "imx7-var-som" ]; then
+    usage && clean_up && return 1
 fi
 
 # New machine definitions may need to be added to the expected location
@@ -143,12 +145,11 @@ else
 fi
 
 # copy new EULA into community so setup uses latest i.MX EULA
+cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
 if [ -d ./sources/meta-freescale ]; then
    cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-freescale/EULA
-   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
 else
    cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-fsl-arm/EULA
-   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
 fi
 
 # copy unpack class with md5sum that matches new EULA
@@ -202,6 +203,7 @@ echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
 echo "    tslib-calibrate \\" >> $BUILD_DIR/conf/local.conf
 echo "    tslib-tests \\" >> $BUILD_DIR/conf/local.conf
 echo "    hostapd \\" >> $BUILD_DIR/conf/local.conf
+echo "    u-boot-splash \\" >> $BUILD_DIR/conf/local.conf
 if [ "$BACKEND" = "fb" ]; then
 echo "    qtbase-examples \\" >> $BUILD_DIR/conf/local.conf
 fi
@@ -209,7 +211,7 @@ echo "    \"" >> $BUILD_DIR/conf/local.conf
 
 
 META_FSL_BSP_RELEASE="${CWD}/sources/meta-fsl-bsp-release/imx/meta-bsp"
-echo "##Freescale Yocto Release layer" >> $BUILD_DIR/conf/bblayers.conf
+echo "##Freescale Yocto Project Release layer" >> $BUILD_DIR/conf/bblayers.conf
 echo "BBLAYERS += \" \${BSPDIR}/sources/meta-fsl-bsp-release/imx/meta-bsp \"" >> $BUILD_DIR/conf/bblayers.conf
 echo "BBLAYERS += \" \${BSPDIR}/sources/meta-fsl-bsp-release/imx/meta-sdk \"" >> $BUILD_DIR/conf/bblayers.conf
 
@@ -226,15 +228,13 @@ echo "BBLAYERS += \" \${BSPDIR}/sources/meta-variscite-6ul \"" >> $BUILD_DIR/con
 
 echo BSPDIR=$BSPDIR
 echo BUILD_DIR=$BUILD_DIR
+
+# Support integrating community meta-freescale instead of meta-fsl-arm
 if [ -d ../sources/meta-freescale ]; then
     echo meta-freescale directory found
     # Change settings according to environment
-    sed -e "s,meta-fsl-arm\s,meta-freescale ,g" \
-        -i conf/bblayers.conf
-    sed -e "s,LAYERDEPENDS\s,#LAYERDEPENDS,g" \
-        -i ../sources/meta-fsl-arm-extra/conf/layer.conf
-    sed -e "s,..BSPDIR./sources/meta-fsl-arm-extra\s, ,g" \
-        -i conf/bblayers.conf
+    sed -e "s,meta-fsl-arm\s,meta-freescale ,g" -i conf/bblayers.conf
+    sed -e "s,\$.BSPDIR./sources/meta-fsl-arm-extra\s,,g" -i conf/bblayers.conf
 fi
 
 cd  $BUILD_DIR

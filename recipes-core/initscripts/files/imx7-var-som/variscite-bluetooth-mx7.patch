@@ -1,0 +1,13 @@
+diff --git a/variscite-bluetooth b/variscite-bluetooth
+index 5a7ca04..48eef72 100644
+--- a/variscite-bluetooth
++++ b/variscite-bluetooth
+@@ -9,7 +9,7 @@
+ # In order to enable or disable this script just change the execution
+ # bits.
+ 
+-som=dart-6ul
++som=var-som-mx7
+ tuple_num=0x80
+ 
+ if [ "$som" = "dart-6ul" ]
