@@ -143,12 +143,11 @@ else
 fi
 
 # copy new EULA into community so setup uses latest i.MX EULA
+cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-mx6ul-mx7/EULA
 if [ -d ./sources/meta-freescale ]; then
    cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-freescale/EULA
-   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
 else
    cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-fsl-arm/EULA
-   cp sources/meta-fsl-bsp-release/imx/EULA.txt sources/meta-variscite-6ul/EULA
 fi
 
 # copy unpack class with md5sum that matches new EULA
@@ -222,7 +221,7 @@ echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-filesystems \"" >
 
 echo "BBLAYERS += \" \${BSPDIR}/sources/meta-qt5 \"" >> $BUILD_DIR/conf/bblayers.conf
 
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-variscite-6ul \"" >> $BUILD_DIR/conf/bblayers.conf
+echo "BBLAYERS += \" \${BSPDIR}/sources/meta-variscite-mx6ul-mx7 \"" >> $BUILD_DIR/conf/bblayers.conf
 
 echo BSPDIR=$BSPDIR
 echo BUILD_DIR=$BUILD_DIR
