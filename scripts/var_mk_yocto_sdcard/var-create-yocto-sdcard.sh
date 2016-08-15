@@ -79,16 +79,16 @@ sudo cp tmp/deploy/images/imx6ul-var-dart/u-boot-sd-2015.10-r0.img			/tmp/rootfs
 function copy_scripts
 {
 echo "scripts..."
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/nand-recovery.sh 	/tmp/rootfs/sbin/
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-nand.sh    	/tmp/rootfs/sbin/
-sudo cp  ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-emmc.sh     /tmp/rootfs/sbin/
+sudo cp  ../sources/meta-variscite-mx6ul-mx7/scripts/var_mk_yocto_sdcard/variscite_scripts/nand-recovery.sh 	/tmp/rootfs/sbin/
+sudo cp  ../sources/meta-variscite-mx6ul-mx7/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-nand.sh    	/tmp/rootfs/sbin/
+sudo cp  ../sources/meta-variscite-mx6ul-mx7/scripts/var_mk_yocto_sdcard/variscite_scripts/yocto-emmc.sh     /tmp/rootfs/sbin/
 #
 sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/e2fsprogs/1.42.9-r0/image/sbin/e2label 	/tmp/rootfs/sbin
 sudo cp  tmp/work/cortexa7hf-vfp-neon-poky-linux-gnueabi/util-linux/2.26.2-r0/build/sfdisk 		/tmp/rootfs/sbin/
 #
 echo "desktop icons..."
-sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/*.desktop      	/tmp/rootfs/usr/share/applications/ 
-sudo cp ../sources/meta-variscite-6ul/scripts/var_mk_yocto_sdcard/variscite_scripts/terminal*      	/tmp/rootfs/usr/bin
+sudo cp ../sources/meta-variscite-mx6ul-mx7/scripts/var_mk_yocto_sdcard/variscite_scripts/*.desktop      	/tmp/rootfs/usr/share/applications/ 
+sudo cp ../sources/meta-variscite-mx6ul-mx7/scripts/var_mk_yocto_sdcard/variscite_scripts/terminal*      	/tmp/rootfs/usr/bin
 }
 
 echo "Variscite Make Yocto Jethro SDCARD utility version 02 DART-6UL version"
