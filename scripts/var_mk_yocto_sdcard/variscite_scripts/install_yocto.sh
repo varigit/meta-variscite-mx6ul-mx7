@@ -149,7 +149,7 @@ install_kernel_to_emmc()
 
 	mkdir -p ${mountdir_prefix}${bootpart}
 	mount -t vfat ${node}${part}${bootpart}		${mountdir_prefix}${bootpart}
-	cp -v ${IMGS_PATH}/*.dtb			${mountdir_prefix}${bootpart}
+	cp -v ${IMGS_PATH}/*emmc*.dtb			${mountdir_prefix}${bootpart}
 	cp -v ${IMGS_PATH}/${KERNEL_IMAGE}		${mountdir_prefix}${bootpart}
 	sync
 	umount ${node}${part}${bootpart}
