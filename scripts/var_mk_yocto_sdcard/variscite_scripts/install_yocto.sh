@@ -175,7 +175,7 @@ install_rootfs_to_emmc()
 usage()
 {
 	echo
-	echo "This script installs Yocto on VAR-SOM-MX6"
+	echo "This script installs Yocto on the SOM's internal storage device"
 	echo
 	echo " Usage: $0 OPTIONS"
 	echo
@@ -279,7 +279,8 @@ if [[ $STORAGE_DEV == "nand" ]] ; then
 	blue_bold_echo $KERNEL_DTB
 
 	if [[ ! -e /dev/mtd0 ]] ; then
-		red_bold_echo "ERROR: \"/dev/mtd0\" does not exist"
+		red_bold_echo "ERROR: Can't find NAND flash device."
+		red_bold_echo "Please verify you are using the correct options for your SOM."
 		exit 1
 	fi
 
@@ -300,7 +301,8 @@ elif [[ $STORAGE_DEV == "emmc" ]] ; then
 	fi
 	node=/dev/${block}
 	if [[ ! -b $node ]] ; then
-		red_bold_echo "ERROR: \"$node\" is not a block device"
+		red_bold_echo "ERROR: Can't find eMMC device ($node)."
+		red_bold_echo "Please verify you are using the correct options for your SOM."
 		exit 1
 	fi
 	part=p
