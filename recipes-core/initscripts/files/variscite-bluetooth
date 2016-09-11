@@ -36,7 +36,12 @@ echo 0 > /sys/class/gpio/gpio${gpio_num}/value
 sleep 0.1
 echo 1 > /sys/class/gpio/gpio${gpio_num}/value
 
-brcm_patchram_plus --patchram /lib/firmware/bcm/bcm43430a1.hcd  --enable_hci --bd_addr 64:a3:cb:5b:69:f0 --no2bytes --tosleep 1000 /dev/${tty_dev} &
+bd_addr_temp=$(cat /sys/class/net/eth1/address | sed 's/\://g')
+bd_addr_temp=$((0x$bd_addr_temp+1))
+bd_addr_temp=$(printf '%012X' $bd_addr_temp)
+bd_addr=$(echo $bd_addr_temp | sed 's/\(..\)/\1:/g;s/:$//')
+
+brcm_patchram_plus --patchram /lib/firmware/bcm/bcm43430a1.hcd  --enable_hci --bd_addr ${bd_addr} --no2bytes --tosleep 1000 /dev/${tty_dev} &
 
 sleep 2
 
