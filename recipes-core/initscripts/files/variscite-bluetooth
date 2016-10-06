@@ -36,7 +36,13 @@ echo 0 > /sys/class/gpio/gpio${gpio_num}/value
 sleep 0.1
 echo 1 > /sys/class/gpio/gpio${gpio_num}/value
 
-bd_addr_temp=$(cat /sys/class/net/eth1/address | sed 's/\://g')
+max() {
+	printf "%s\n" "$@" | sort -g -r | head -n1
+}
+
+eth0_addr=$(cat /sys/class/net/eth0/address | sed 's/\://g')
+eth1_addr=$(cat /sys/class/net/eth1/address | sed 's/\://g')
+bd_addr_temp=$(max $eth0_addr $eth1_addr)
 bd_addr_temp=$((0x$bd_addr_temp+1))
 bd_addr_temp=$(printf '%012X' $bd_addr_temp)
 bd_addr=$(echo $bd_addr_temp | sed 's/\(..\)/\1:/g;s/:$//')
