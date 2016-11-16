@@ -175,67 +175,61 @@ if [ ! -e $BUILD_DIR/conf/local.conf ]; then
     return 1
 fi
 
-# On the first script run, backup the local.conf file
-# Consecutive runs, it restores the backup and changes are appended on this one.
+# On the first script run, backup local.conf & bblayers.conf and append changes
+# On consecutive runs, do nothing
 if [ ! -e $BUILD_DIR/conf/local.conf.org ]; then
     cp $BUILD_DIR/conf/local.conf $BUILD_DIR/conf/local.conf.org
-else
-    cp $BUILD_DIR/conf/local.conf.org $BUILD_DIR/conf/local.conf
-fi
 
+    echo "##Variscite additional pacakges" >> $BUILD_DIR/conf/local.conf
+    echo "IMAGE_INSTALL_append = \" \\" >> $BUILD_DIR/conf/local.conf
+    echo "    minicom \\" >> $BUILD_DIR/conf/local.conf
+    echo "    imx-kobs \\" >> $BUILD_DIR/conf/local.conf
+    echo "    tcf-agent \\" >> $BUILD_DIR/conf/local.conf
+    echo "    openssh-sftp-server \\" >> $BUILD_DIR/conf/local.conf
+    echo "    fio \\" >> $BUILD_DIR/conf/local.conf
+    echo "    bcm4343w-fw \\" >> $BUILD_DIR/conf/local.conf
+    echo "    brcm-patchram-plus \\" >> $BUILD_DIR/conf/local.conf
+    echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
+    echo "    tslib-calibrate \\" >> $BUILD_DIR/conf/local.conf
+    echo "    tslib-tests \\" >> $BUILD_DIR/conf/local.conf
+    echo "    hostapd \\" >> $BUILD_DIR/conf/local.conf
+    echo "    u-boot-splash \\" >> $BUILD_DIR/conf/local.conf
+    echo "    runonkeyrls \\" >> $BUILD_DIR/conf/local.conf
+    if [ "$BACKEND" = "fb" ]; then
+	    echo "    qtbase-examples \\" >> $BUILD_DIR/conf/local.conf
+    fi
+    echo "    \"" >> $BUILD_DIR/conf/local.conf
+fi
 
 if [ ! -e $BUILD_DIR/conf/bblayers.conf.org ]; then
     cp $BUILD_DIR/conf/bblayers.conf $BUILD_DIR/conf/bblayers.conf.org
-else
-    cp $BUILD_DIR/conf/bblayers.conf.org $BUILD_DIR/conf/bblayers.conf
-fi
 
-echo "##Variscite additional pacakges" >> $BUILD_DIR/conf/local.conf
-echo "IMAGE_INSTALL_append = \" \\" >> $BUILD_DIR/conf/local.conf
-echo "    minicom \\" >> $BUILD_DIR/conf/local.conf
-echo "    imx-kobs \\" >> $BUILD_DIR/conf/local.conf
-echo "    tcf-agent \\" >> $BUILD_DIR/conf/local.conf
-echo "    openssh-sftp-server \\" >> $BUILD_DIR/conf/local.conf
-echo "    fio \\" >> $BUILD_DIR/conf/local.conf
-echo "    bcm4343w-fw \\" >> $BUILD_DIR/conf/local.conf
-echo "    brcm-patchram-plus \\" >> $BUILD_DIR/conf/local.conf
-echo "    kernel-modules \\" >> $BUILD_DIR/conf/local.conf
-echo "    tslib-calibrate \\" >> $BUILD_DIR/conf/local.conf
-echo "    tslib-tests \\" >> $BUILD_DIR/conf/local.conf
-echo "    hostapd \\" >> $BUILD_DIR/conf/local.conf
-echo "    u-boot-splash \\" >> $BUILD_DIR/conf/local.conf
-echo "    runonkeyrls \\" >> $BUILD_DIR/conf/local.conf
-if [ "$BACKEND" = "fb" ]; then
-echo "    qtbase-examples \\" >> $BUILD_DIR/conf/local.conf
-fi
-echo "    \"" >> $BUILD_DIR/conf/local.conf
+    META_FSL_BSP_RELEASE="${CWD}/sources/meta-fsl-bsp-release/imx/meta-bsp"
+    echo "##Freescale Yocto Project Release layer" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-fsl-bsp-release/imx/meta-bsp \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-fsl-bsp-release/imx/meta-sdk \"" >> $BUILD_DIR/conf/bblayers.conf
 
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-browser \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-gnome \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-networking \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-python \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-ruby \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-filesystems \"" >> $BUILD_DIR/conf/bblayers.conf
 
-META_FSL_BSP_RELEASE="${CWD}/sources/meta-fsl-bsp-release/imx/meta-bsp"
-echo "##Freescale Yocto Project Release layer" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-fsl-bsp-release/imx/meta-bsp \"" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-fsl-bsp-release/imx/meta-sdk \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-qt5 \"" >> $BUILD_DIR/conf/bblayers.conf
 
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-browser \"" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-gnome \"" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-networking \"" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-python \"" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-ruby \"" >> $BUILD_DIR/conf/bblayers.conf
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-openembedded/meta-filesystems \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo "BBLAYERS += \" \${BSPDIR}/sources/meta-variscite-mx6ul-mx7 \"" >> $BUILD_DIR/conf/bblayers.conf
 
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-qt5 \"" >> $BUILD_DIR/conf/bblayers.conf
+    echo BSPDIR=$BSPDIR
+    echo BUILD_DIR=$BUILD_DIR
 
-echo "BBLAYERS += \" \${BSPDIR}/sources/meta-variscite-mx6ul-mx7 \"" >> $BUILD_DIR/conf/bblayers.conf
-
-echo BSPDIR=$BSPDIR
-echo BUILD_DIR=$BUILD_DIR
-
-# Support integrating community meta-freescale instead of meta-fsl-arm
-if [ -d ../sources/meta-freescale ]; then
-    echo meta-freescale directory found
-    # Change settings according to environment
-    sed -e "s,meta-fsl-arm\s,meta-freescale ,g" -i conf/bblayers.conf
-    sed -e "s,\$.BSPDIR./sources/meta-fsl-arm-extra\s,,g" -i conf/bblayers.conf
+    # Support integrating community meta-freescale instead of meta-fsl-arm
+    if [ -d ../sources/meta-freescale ]; then
+	    echo meta-freescale directory found
+	    # Change settings according to environment
+	    sed -e "s,meta-fsl-arm\s,meta-freescale ,g" -i conf/bblayers.conf
+	    sed -e "s,\$.BSPDIR./sources/meta-fsl-arm-extra\s,,g" -i conf/bblayers.conf
+    fi
 fi
 
 cd  $BUILD_DIR
