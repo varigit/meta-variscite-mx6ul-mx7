@@ -117,7 +117,7 @@ function delete_device
 	sync
 
 	dd if=/dev/zero of=$node bs=1M count=4
-	sync
+	sync; sleep 1
 }
 
 function ceildiv
@@ -148,8 +148,9 @@ ${PART1_START},${PART1_SIZE},c
 ${PART2_START},${PART2_SIZE},83
 EOF
 
+	sync; sleep 1
+
 	fdisk -l $node
-	sync
 }
 
 function format_parts
@@ -159,6 +160,7 @@ function format_parts
 
 	mkfs.vfat ${node}${part}1 -n ${FAT_VOLNAME}
 	mkfs.ext4 ${node}${part}2 -L rootfs
+	sync; sleep 1
 }
 
 function install_bootloader
@@ -172,7 +174,6 @@ function install_bootloader
 	else
 		dd if=${YOCTO_IMGS_PATH}/u-boot.imx-sd of=${node} bs=1K seek=1; sync
 	fi
-
 }
 
 function mount_parts
