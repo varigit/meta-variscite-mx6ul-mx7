@@ -9,7 +9,9 @@ LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a
 SRCBRANCH_mx6ul = "imx_v2015.10_dart_6ul_var1"
 SRCBRANCH_mx7 = "imx_v2015.04_4.1.15_1.1.0_ga_var02"
 UBOOT_SRC = "git://github.com/varigit/uboot-imx.git;protocol=git"
-SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
+SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH} \
+           file://gcc6.patch \
+"
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
