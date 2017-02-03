@@ -33,8 +33,7 @@ DEFAULT_PREFERENCE = "1"
 addtask copy_defconfig after do_unpack before do_preconfigure
 do_copy_defconfig () {
     # copy latest imx_v7_defconfig to use
-    cp ${S}/arch/arm/configs/${FSL_KERNEL_DEFCONFIG} ${B}/.config
-    cp ${S}/arch/arm/configs/${FSL_KERNEL_DEFCONFIG} ${B}/../defconfig
+    cp ${S}/arch/arm/configs/${FSL_KERNEL_DEFCONFIG} ${WORKDIR}/defconfig
 }
 
 COMPATIBLE_MACHINE = "(mx6ul|mx7)"
