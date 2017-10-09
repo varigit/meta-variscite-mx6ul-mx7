@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a
 SRCBRANCH = "imx_v2015.10_dart_6ul_var1"
 UBOOT_SRC ?= "git://github.com/varigit/uboot-imx.git;protocol=git;protocol=git"
 SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
-SRCREV = "3adc60142bb88ce005274e678704641b61f705b3"
+SRCREV = "570b452d2056ddb8a724f47bc193bfcc55663891"
 
 S = "${WORKDIR}/git"
 
