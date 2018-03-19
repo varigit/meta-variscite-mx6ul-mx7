@@ -38,10 +38,8 @@ fi
 
 if [[ $MACHINE == imx6ul-var-dart ]] ; then
 	FAT_VOLNAME=BOOT-VAR6UL
-	IS_SPL=true
 elif [[ $MACHINE == imx7-var-som ]] ; then
 	FAT_VOLNAME=BOOT-VARMX7
-	IS_SPL=false
 else
 	help
 	exit 1
@@ -168,12 +166,8 @@ function install_bootloader
 	echo
 	echo "Installing U-Boot"
 
-	if [[ $IS_SPL == true ]] ; then
-		dd if=${YOCTO_IMGS_PATH}/SPL-sd of=${node} bs=1K seek=1; sync
-		dd if=${YOCTO_IMGS_PATH}/u-boot.img-sd of=${node} bs=1K seek=69; sync
-	else
-		dd if=${YOCTO_IMGS_PATH}/u-boot.imx-sd of=${node} bs=1K seek=1; sync
-	fi
+	dd if=${YOCTO_IMGS_PATH}/SPL-sd of=${node} bs=1K seek=1; sync
+	dd if=${YOCTO_IMGS_PATH}/u-boot.img-sd of=${node} bs=1K seek=69; sync
 }
 
 function mount_parts
@@ -221,13 +215,10 @@ function copy_images
 	pv ${YOCTO_IMGS_PATH}/fsl-image-gui-${MACHINE}.tar.bz2 >	${P2_MOUNT_DIR}/opt/images/Yocto/rootfs.tar.bz2
 	pv ${YOCTO_IMGS_PATH}/fsl-image-gui-${MACHINE}.ubi >		${P2_MOUNT_DIR}/opt/images/Yocto/rootfs.ubi
 
-	cp ${YOCTO_IMGS_PATH}/u-boot.im?-nand				${P2_MOUNT_DIR}/opt/images/Yocto/
-	cp ${YOCTO_IMGS_PATH}/u-boot.im?-sd				${P2_MOUNT_DIR}/opt/images/Yocto/
-
-	if [[ $IS_SPL == true ]] ; then
-		cp ${YOCTO_IMGS_PATH}/SPL-nand					${P2_MOUNT_DIR}/opt/images/Yocto/
-		cp ${YOCTO_IMGS_PATH}/SPL-sd					${P2_MOUNT_DIR}/opt/images/Yocto/
-	fi
+	cp ${YOCTO_IMGS_PATH}/SPL-nand					${P2_MOUNT_DIR}/opt/images/Yocto/
+	cp ${YOCTO_IMGS_PATH}/SPL-sd					${P2_MOUNT_DIR}/opt/images/Yocto/
+	cp ${YOCTO_IMGS_PATH}/u-boot.img-nand				${P2_MOUNT_DIR}/opt/images/Yocto/
+	cp ${YOCTO_IMGS_PATH}/u-boot.img-sd				${P2_MOUNT_DIR}/opt/images/Yocto/
 }
 
 function copy_scripts
